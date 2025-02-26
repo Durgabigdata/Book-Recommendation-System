@@ -2,6 +2,8 @@ import streamlit as st
 import pickle
 import pandas as pd
 import numpy as np
+import zipfile
+import os
 
 # Function to recommend similar books based on input book title
 def recommend(book):

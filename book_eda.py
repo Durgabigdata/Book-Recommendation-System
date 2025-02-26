@@ -70,10 +70,35 @@ st.markdown(
 st.markdown('<div class="main-title">📚 Book Recommendation System</div>', unsafe_allow_html=True)
 st.write("<p style='text-align: center; font-size: 18px;'>Discover your next favorite book based on your current reads!</p>", unsafe_allow_html=True)
 
-# Load data & models
-collaborative_filtering_pivot = pickle.load(open("C:\\Users\\Admin\\Downloads\\pivot.pkl", 'rb'))
-books_data = pickle.load(open("C:\\Users\\Admin\\Downloads\\Books.pkl", 'rb'))
-similarities = pickle.load(open("C:\\Users\\Admin\\Downloads\\similarities.pkl", 'rb'))
+
+model_zip_path = "Books.zip"
+book_path = "Books.pkl"
+similarities_path = "similarities.pkl"
+pivot_path="pivot.pkl"
+
+
+# Extract model if it's not already extracted
+if not os.path.exists(book_path):
+    with zipfile.ZipFile(model_zip_path, 'r') as zip_ref:
+        zip_ref.extractall()  # Extracts Books.pkl
+
+# Check if extracted files exist
+if not os.path.exists(book_path):
+    raise FileNotFoundError(f"Model file {model_path} not found after extraction!")
+
+if not os.path.exists(similarities_path):
+    raise FileNotFoundError(f"Vectorizer file {vectorizer_path} not found!")
+
+# Load model and vectorizer
+with open(similarities_path, 'rb') as vec_f:
+    similarities = pickle.load(vec_f)
+
+with open(book_path, 'rb') as model_f:
+    books_data = pickle.load(model_f)
+
+with open(pivot_path, 'rb') as pivot_f:
+    collaborative_filtering_pivot = pickle.load(pivot_f)
+
 
 book_list = collaborative_filtering_pivot.index.values
 
